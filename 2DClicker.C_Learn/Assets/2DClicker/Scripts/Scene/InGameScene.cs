@@ -1,5 +1,6 @@
 using Common.Assets;
 using Common.Path;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Build;
@@ -9,15 +10,27 @@ public class InGameScene : BaseScene<InGameScene>
 {
     private const string playerName = "Player";
     public Player player { get; private set; }
+    public StageManager stageManager { get; private set; }
 
-    public override void InitGameObject()
+    public override async UniTask InitGameObject()
     {
-        CreatePlayer();
+        await CreatePlayer();
+        CreateStageManager();
     }
 
-    private async void CreatePlayer()
+    private async UniTask CreatePlayer()
     {
         GameObject playerGo = await AddressableAssets.InstantiateAsync(AdressablePath.PlayerPath(playerName));
-        player = playerGo.GetComponent<Player>();
+        Instance.player = playerGo.GetComponent<Player>();
+
+        Instance.player.Init();
+    }
+
+    private void CreateStageManager()
+    {
+        GameObject go = new GameObject("StageManager");
+        Instance.stageManager = go.AddComponent<StageManager>();
+
+        stageManager.Init();
     }
 }

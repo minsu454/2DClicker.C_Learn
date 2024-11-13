@@ -1,9 +1,11 @@
+using Common.Assets;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseScene<T> : MonoBehaviour, IAddressable, IInit where T : BaseScene<T>
+public abstract class BaseScene<T> : MonoBehaviour, IAddressable, IUniTaskInit where T : BaseScene<T>
 {
     private static T instance;
     public static T Instance
@@ -16,7 +18,7 @@ public abstract class BaseScene<T> : MonoBehaviour, IAddressable, IInit where T 
 
     public event Action<GameObject> ReleaseEvent;
 
-    public virtual void Init()
+    public virtual async UniTask Init()
     {
         if (instance != null)
         {
@@ -26,10 +28,10 @@ public abstract class BaseScene<T> : MonoBehaviour, IAddressable, IInit where T 
 
         instance = this as T;
 
-        InitGameObject();
+        await InitGameObject();
     }
 
-    public abstract void InitGameObject();
+    public abstract UniTask InitGameObject();
 
     protected virtual void OnDestroy()
     {

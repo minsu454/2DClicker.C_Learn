@@ -1,6 +1,7 @@
 using Common.Assets;
 using Common.Path;
 using Common.SceneEx;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,13 +15,13 @@ public sealed class UIManager : MonoBehaviour, IInit
         SceneLoader.Add(LoadPriorityType.UI, OnSceneLoaded);
     }
 
-    private void OnSceneLoaded(Scene scene)
+    private async UniTask OnSceneLoaded(Scene scene)
     {
         Clear();
-        CreateSceneUI(scene.name);
+        await CreateSceneUI(scene.name);
     }
 
-    private async void CreateSceneUI(string name)
+    private async UniTask CreateSceneUI(string name)
     {
         GameObject prefab = await AddressableAssets.InstantiateAsync(AdressablePath.UIPath(name));
 

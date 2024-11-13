@@ -20,7 +20,8 @@ MonoBehaviour:
   - m_GUID: 77772fe74255e2e448f47dbc84610e56
     m_Address: Scene
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Scene
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8d53e569ee1c80d41b8faf3395611543, type: 2}

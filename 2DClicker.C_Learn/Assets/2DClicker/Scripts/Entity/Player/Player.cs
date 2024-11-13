@@ -4,16 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Player : MonoBehaviour, IAddressable
+public class Player : MonoBehaviour, IAddressable, IInit
 {
-    public event Action<GameObject> ReleaseEvent;
-
     [SerializeField] private PlayerSO player;
 
-    private int gold;
-    private int score;
+    public event Action<GameObject> ReleaseEvent;
 
-    private void Awake()
+    public event Action<int> goldUIEvent;
+    public event Action<int> needUpgradeGoldUIEvent;
+
+    private int buff = 0;
+
+    private int gold = 0;
+    public int Gold
+    {
+        get { return gold; }
+        private set
+        {
+            gold = value;
+            goldUIEvent?.Invoke(gold);
+        }
+    }
+
+    private int needUpgradeGold = 100;
+    public int NeedUpgradeGold
+    {
+        get { return needUpgradeGold; }
+        private set
+        {
+            gold = value;
+            needUpgradeGoldUIEvent?.Invoke(gold);
+        }
+    }
+
+    public void Init()
     {
         PlayerController controller = GetComponent<PlayerController>();
         controller.ClickEvent += GiveDamage;
@@ -21,12 +45,23 @@ public class Player : MonoBehaviour, IAddressable
 
     private void GiveDamage()
     {
-        
+        Debug.Log(player.Damage + buff);
+        InGameScene.Instance.stageManager.CurEnemy.TakeDamage(player.Damage + buff);
     }
 
     public void Upgrade()
     {
+        if (Gold < NeedUpgradeGold)
+            return;
 
+        Gold = Gold - NeedUpgradeGold;
+        NeedUpgradeGold = NeedUpgradeGold + (int)(NeedUpgradeGold * 0.5f);
+        buff += buff;
+    }
+
+    public void GetItem(EnemySO info)
+    {
+        Gold += info.DropGold;
     }
 
     private void OnDestroy()

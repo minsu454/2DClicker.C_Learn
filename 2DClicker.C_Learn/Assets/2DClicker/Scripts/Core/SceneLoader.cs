@@ -1,5 +1,6 @@
 using Common.Assets;
 using Common.Path;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Common.SceneEx
 {
     public static class SceneLoader
     {
-        public readonly static SortedList<LoadPriorityType, Action<Scene>> completedList = new SortedList<LoadPriorityType, Action<Scene>>();
+        public readonly static SortedList<LoadPriorityType, Func<Scene, UniTask>> completedList = new SortedList<LoadPriorityType, Func<Scene, UniTask>>();
 
         public static void Init()
         {
@@ -19,11 +20,11 @@ namespace Common.SceneEx
             SceneManager.sceneLoaded += OnLoadCompleted;
         }
 
-        public static void Add(LoadPriorityType type, Action<Scene> loadCompleted)
+        public static void Add(LoadPriorityType type, Func<Scene, UniTask> loadCompleted)
         {
-            if (completedList.ContainsValue(loadCompleted))
+            if (completedList.ContainsKey(type))
             {
-                Debug.LogWarning($"There is already an identical LoadCompleted event. : {loadCompleted}");
+                Debug.LogWarning($"There is already an identical LoadCompleted event : {type}");
                 return;
             }
 
@@ -43,25 +44,32 @@ namespace Common.SceneEx
         }
 
 
-        private static void OnLoadCompleted(Scene scene, LoadSceneMode sceneMode)
+        private static async void OnLoadCompleted(Scene scene, LoadSceneMode sceneMode)
         {
             foreach (var item in completedList)
             {
-                item.Value.Invoke(scene);
+                try
+                {
+                    await item.Value.Invoke(scene);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
             }
         }
 
-        private static async void LoadScene(Scene scene)
+        private static async UniTask LoadScene(Scene scene)
         {
             GameObject go = await AddressableAssets.InstantiateAsync(AdressablePath.ScenePath(scene.name));
 
-            if (!go.TryGetComponent(out IInit baseScene))
+            if (!go.TryGetComponent(out IUniTaskInit baseScene))
             {
                 Debug.LogError($"GameObject Is Not BaseScene Inheritance : {go}");
                 return;
             }
 
-            baseScene.Init();
+            await baseScene.Init();
         }
     }
 }
