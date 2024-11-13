@@ -9,6 +9,7 @@ public class InGame : BaseSceneUI
 {
     public TextMeshProUGUI GoldTxt;
     public TextMeshProUGUI NeedUpgradeGoldTxt;
+    public TextMeshProUGUI NeedAutoUpgradeGoldTxt;
 
     public override void Init()
     {
@@ -16,16 +17,22 @@ public class InGame : BaseSceneUI
 
         InGameScene.Instance.player.goldUIEvent += OnGoldChanged;
         InGameScene.Instance.player.needUpgradeGoldUIEvent += OnNeedUpgradeGoldChanged;
+        InGameScene.Instance.player.needAutoUpgradeGoldUIEvent += OnNeedAutoUpgradeGoldChanged;
     }
 
     private void OnGoldChanged(int gold)
     {
-        GoldTxt.text = $"{gold.ToString()} G";
+        GoldTxt.text = $"{gold} G";
     }
 
     private void OnNeedUpgradeGoldChanged(int gold)
     {
-        NeedUpgradeGoldTxt.text = $"{gold.ToString()} G";
+        NeedUpgradeGoldTxt.text = $"{gold} G";
+    }
+
+    private void OnNeedAutoUpgradeGoldChanged(int gold)
+    {
+        NeedAutoUpgradeGoldTxt.text = $"{gold} G";
     }
 
     public void UpgradeBtn()

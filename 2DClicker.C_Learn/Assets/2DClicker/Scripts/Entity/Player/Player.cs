@@ -12,6 +12,7 @@ public class Player : MonoBehaviour, IAddressable, IInit
 
     public event Action<int> goldUIEvent;
     public event Action<int> needUpgradeGoldUIEvent;
+    public event Action<int> needAutoUpgradeGoldUIEvent;
 
     private int buff = 0;
 
@@ -37,6 +38,17 @@ public class Player : MonoBehaviour, IAddressable, IInit
         }
     }
 
+    private int needAutoUpgradeGold = 100;
+    public int NeedAutoUpgradeGold
+    {
+        get { return needAutoUpgradeGold; }
+        private set
+        {
+            gold = value;
+            needAutoUpgradeGoldUIEvent?.Invoke(gold);
+        }
+    }
+
     public void Init()
     {
         PlayerController controller = GetComponent<PlayerController>();
@@ -45,7 +57,9 @@ public class Player : MonoBehaviour, IAddressable, IInit
 
     private void GiveDamage()
     {
-        Debug.Log(player.Damage + buff);
+        if (InGameScene.Instance.stageManager.CurEnemy == null)
+            return;
+
         InGameScene.Instance.stageManager.CurEnemy.TakeDamage(player.Damage + buff);
     }
 

@@ -9,12 +9,14 @@ public class Enemy : MonoBehaviour, IAddressable, IInit
     public event Action<EnemySO> DieEvent;
 
     [SerializeField] private EnemySO enemySO;
+    [SerializeField] private UIHPBar bar;
 
     private int curHealth;
 
     public void Init()
     {
         curHealth = enemySO.MaxHealth;
+        bar.SetUIBar(curHealth, enemySO.MaxHealth);
     }
 
     public void TakeDamage(int damage)
@@ -23,7 +25,7 @@ public class Enemy : MonoBehaviour, IAddressable, IInit
             return;
 
         curHealth = Mathf.Max(curHealth - damage, 0);
-        Debug.Log(curHealth);
+        bar.SetUIBar(curHealth, enemySO.MaxHealth);
 
         if (curHealth == 0)
         {
