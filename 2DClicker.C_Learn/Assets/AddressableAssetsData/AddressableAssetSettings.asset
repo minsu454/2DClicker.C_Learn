@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 8203b8a02bb0a0b448d0d8e957218cc7
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: d33b2b158ed98f27b0b1a56d06de0e82
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -47,6 +47,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 45c2b8cbcd7cd7149812a072a7e293c2, type: 2}
   - {fileID: 11400000, guid: 938f1fa915b92fe40b67b94cafdcaa84, type: 2}
   - {fileID: 11400000, guid: e464cac057941a74c9ed8123f56d0451, type: 2}
+  - {fileID: 11400000, guid: 62a6fe8b6a3ff094b9b3e5979541ce1e, type: 2}
+  - {fileID: 11400000, guid: 57219b17f333e2b4e9bda8f7b6bf3807, type: 2}
+  - {fileID: 11400000, guid: 49e4a6fc8a4a8ba47a8187fc8d9f2f9e, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -89,6 +92,9 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - UI
+    - Enemy
+    - Player
+    - Scene
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 75d6477816262664a92e6e72aacfd632, type: 2}

@@ -1,55 +1,49 @@
 using Common.Assets;
-using Common.Scene;
-using Cysharp.Threading.Tasks;
-using System;
+using Common.Path;
+using Common.SceneEx;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public sealed class UIManager : MonoBehaviour, IManager
+public sealed class UIManager : MonoBehaviour, IInit
 {
     private readonly List<BasePopupUI> showList = new List<BasePopupUI>();
 
     public void Init()
     {
-        Clear();
-        SceneManagerEx.OnLoadCompleted(OnSceneLoaded);
+        SceneLoader.Add(LoadPriorityType.UI, OnSceneLoaded);
     }
 
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene)
     {
-        
+        Clear();
         CreateSceneUI(scene.name);
     }
 
     private async void CreateSceneUI(string name)
     {
-        GameObject prefab = await AddressableAssets.InstantiateAsync($"UI/{name}.prefab");
+        GameObject prefab = await AddressableAssets.InstantiateAsync(AdressablePath.UIPath(name));
 
-        if (prefab == null)
+        if (!prefab.TryGetComponent(out BaseSceneUI sceneUI))
         {
-            Debug.LogError($"Is Not Prefab Addressable Asset Forder : {name}");
+            Debug.LogError($"GameObject Is Not BaseSceneUI Inheritance : {prefab}");
             return;
         }
-
-        BaseSceneUI sceneUI = prefab.GetComponent<BaseSceneUI>();
 
         sceneUI.Init();
     }
 
     public async void CreatePopup<T>(PopupOption option = null) where T : BasePopupUI
     {
-        GameObject prefab = await AddressableAssets.InstantiateAsync($"UI/{typeof(T).Name}.prefab");
+        GameObject prefab = await AddressableAssets.InstantiateAsync(AdressablePath.UIPath(typeof(T).Name));
 
-        if (prefab == null)
+        if (!prefab.TryGetComponent(out T popupUI))
         {
-            Debug.LogError($"Is Not Prefab Addressable Asset Forder : {typeof(T).Name}");
+            Debug.LogError($"GameObject Is Not BaseSceneUI Inheritance : {prefab}");
             return;
         }
 
-        T popupUI = prefab.GetComponent<T>();
         showList.Add(popupUI);
-
         popupUI.Init(option);
     }
 

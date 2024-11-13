@@ -1,3 +1,4 @@
+using Common.SceneEx;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,9 +20,11 @@ public sealed class Managers : MonoBehaviour
         DontDestroyOnLoad(go);
 
         instance.uiManager = CreateManager<UIManager>(go.transform);
+
+        SceneLoader.Init();
     }
 
-    private static T CreateManager<T>(Transform parent) where T : Component, IManager
+    private static T CreateManager<T>(Transform parent) where T : Component, IInit
     {
         GameObject go = new GameObject(typeof(T).Name);
         T t = go.AddComponent<T>();

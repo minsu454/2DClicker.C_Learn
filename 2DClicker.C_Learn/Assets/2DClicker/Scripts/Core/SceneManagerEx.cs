@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-namespace Common.Scene
+namespace Common.SceneEx
 {
     public static class SceneManagerEx
     {
@@ -52,14 +52,6 @@ namespace Common.Scene
             }
 
             return name;
-        }
-
-        /// <summary>
-        /// 씬 로드됐을 때 호출할 action 붙이는 함수
-        /// </summary>
-        public static void OnLoadCompleted(UnityAction<UnityEngine.SceneManagement.Scene, LoadSceneMode> callback)
-        {
-            SceneManager.sceneLoaded += callback;
         }
     }
 }
