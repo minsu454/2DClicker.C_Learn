@@ -14,7 +14,7 @@ public class InGameScene : BaseScene<InGameScene>
     public GameObject damagePrefab;
     private readonly Queue<GameObject> ObjectPool = new Queue<GameObject>();
 
-    public override async UniTask InitGameObject()
+    public override async UniTask InitScene()
     {
         await CreatePlayer();
         CreateStageManager();

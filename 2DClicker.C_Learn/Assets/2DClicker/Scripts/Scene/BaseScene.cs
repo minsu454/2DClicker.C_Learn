@@ -18,7 +18,7 @@ public abstract class BaseScene<T> : MonoBehaviour, IAddressable, IUniTaskInit w
 
     public event Action<GameObject> ReleaseEvent;
 
-    public virtual async UniTask Init()
+    public async UniTask Init()
     {
         if (instance != null)
         {
@@ -28,10 +28,13 @@ public abstract class BaseScene<T> : MonoBehaviour, IAddressable, IUniTaskInit w
 
         instance = this as T;
 
-        await InitGameObject();
+        await InitScene();
     }
 
-    public abstract UniTask InitGameObject();
+    /// <summary>
+    /// 씬 동적 생성 해줄 오브젝트 몰빵하는 함수
+    /// </summary>
+    public abstract UniTask InitScene();
 
     protected virtual void OnDestroy()
     {
