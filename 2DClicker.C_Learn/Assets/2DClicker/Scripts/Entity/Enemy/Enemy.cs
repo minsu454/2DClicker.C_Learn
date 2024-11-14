@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IAddressable, IInit
@@ -19,10 +20,16 @@ public class Enemy : MonoBehaviour, IAddressable, IInit
         bar.SetUIBar(curHealth, enemySO.MaxHealth);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(Vector2 damageUIPos, int damage)
     {
-        if (damage <= 0)
+        if (curHealth <= 0)
             return;
+
+        GameObject go = InGameScene.Instance.Pop();
+        go.transform.position = damageUIPos;
+        go.GetComponent<Damage>().textPro.text = $"-{damage}";
+
+        go.SetActive(true);
 
         curHealth = Mathf.Max(curHealth - damage, 0);
         bar.SetUIBar(curHealth, enemySO.MaxHealth);

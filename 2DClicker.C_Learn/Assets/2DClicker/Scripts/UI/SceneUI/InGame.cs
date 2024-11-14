@@ -39,4 +39,9 @@ public class InGame : BaseSceneUI
     {
         InGameScene.Instance.player.Upgrade();
     }
+
+    public void AutoUpgradeBtn()
+    {
+        InGameScene.Instance.player.AutoUpgrade();
+    }
 }

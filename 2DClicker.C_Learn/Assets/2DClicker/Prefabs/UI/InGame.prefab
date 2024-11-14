@@ -458,7 +458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GoldTxt: {fileID: 6590068567725823854}
   NeedUpgradeGoldTxt: {fileID: 7435847664293500120}
-  NeedAutoUpgradeGoldTxt: {fileID: 0}
+  NeedAutoUpgradeGoldTxt: {fileID: 6578947575515035160}
 --- !u!223 &7113949496668668747
 Canvas:
   m_ObjectHideFlags: 0
@@ -780,7 +780,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4152763665312327497}
         m_TargetAssemblyTypeName: InGame, Assembly-CSharp
-        m_MethodName: UpgradeBtn
+        m_MethodName: AutoUpgradeBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -855,7 +855,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100 G
+  m_text: 500 G
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

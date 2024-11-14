@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IAddressable, IInit
     public event Action<int> needUpgradeGoldUIEvent;
     public event Action<int> needAutoUpgradeGoldUIEvent;
 
-    private int buff = 0;
+    private int damage;
 
     private int gold = 0;
     public int Gold
@@ -33,19 +33,19 @@ public class Player : MonoBehaviour, IAddressable, IInit
         get { return needUpgradeGold; }
         private set
         {
-            gold = value;
-            needUpgradeGoldUIEvent?.Invoke(gold);
+            needUpgradeGold = value;
+            needUpgradeGoldUIEvent?.Invoke(needUpgradeGold);
         }
     }
 
-    private int needAutoUpgradeGold = 100;
+    private int needAutoUpgradeGold = 500;
     public int NeedAutoUpgradeGold
     {
         get { return needAutoUpgradeGold; }
         private set
         {
-            gold = value;
-            needAutoUpgradeGoldUIEvent?.Invoke(gold);
+            needAutoUpgradeGold = value;
+            needAutoUpgradeGoldUIEvent?.Invoke(needAutoUpgradeGold);
         }
     }
 
@@ -53,14 +53,21 @@ public class Player : MonoBehaviour, IAddressable, IInit
     {
         PlayerController controller = GetComponent<PlayerController>();
         controller.ClickEvent += GiveDamage;
+        
     }
 
-    private void GiveDamage()
+    private void Start()
+    {
+        damage = player.Damage;
+        gold = player.Gold;
+    }
+
+    private void GiveDamage(Vector2 pos)
     {
         if (InGameScene.Instance.stageManager.CurEnemy == null)
             return;
 
-        InGameScene.Instance.stageManager.CurEnemy.TakeDamage(player.Damage + buff);
+        InGameScene.Instance.stageManager.CurEnemy.TakeDamage(pos, damage);
     }
 
     public void Upgrade()
@@ -69,8 +76,28 @@ public class Player : MonoBehaviour, IAddressable, IInit
             return;
 
         Gold = Gold - NeedUpgradeGold;
-        NeedUpgradeGold = NeedUpgradeGold + (int)(NeedUpgradeGold * 0.5f);
-        buff += buff;
+        NeedUpgradeGold = NeedUpgradeGold + 50;
+        damage += damage;
+    }
+
+    public void AutoUpgrade()
+    {
+        if (Gold < NeedAutoUpgradeGold)
+            return;
+
+        Gold = Gold - NeedAutoUpgradeGold;
+        NeedAutoUpgradeGold = NeedAutoUpgradeGold * 2;
+
+        StartCoroutine(CoTakeDamage());
+    }
+
+    private IEnumerator CoTakeDamage()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            GiveDamage(Vector2.zero);
+        }
     }
 
     public void GetItem(EnemySO info)

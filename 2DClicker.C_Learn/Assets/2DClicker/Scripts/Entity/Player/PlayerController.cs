@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public event Action ClickEvent;
+    public event Action<Vector2> ClickEvent;
 
     private bool isPointerOverGameObject;
 
@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && !isPointerOverGameObject)
         {
-            ClickEvent?.Invoke();
+            Vector2 pos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            ClickEvent?.Invoke(pos);
         }
     }
 }

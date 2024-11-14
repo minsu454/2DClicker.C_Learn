@@ -11,11 +11,14 @@ public class InGameScene : BaseScene<InGameScene>
     private const string playerName = "Player";
     public Player player { get; private set; }
     public StageManager stageManager { get; private set; }
+    public GameObject damagePrefab;
+    private readonly Queue<GameObject> ObjectPool = new Queue<GameObject>();
 
     public override async UniTask InitGameObject()
     {
         await CreatePlayer();
         CreateStageManager();
+        Pooling();
     }
 
     private async UniTask CreatePlayer()
@@ -32,5 +35,21 @@ public class InGameScene : BaseScene<InGameScene>
         Instance.stageManager = go.AddComponent<StageManager>();
 
         stageManager.Init();
+    }
+    
+    private void Pooling()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            ObjectPool.Enqueue(Instantiate(damagePrefab));
+        }
+    }
+
+    public GameObject Pop()
+    {
+        GameObject go = ObjectPool.Dequeue();
+        ObjectPool.Enqueue(go);
+
+        return go;
     }
 }
