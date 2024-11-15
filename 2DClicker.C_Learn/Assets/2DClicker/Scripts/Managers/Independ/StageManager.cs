@@ -3,7 +3,7 @@ using Common.Path;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class StageManager : MonoBehaviour, IUniTaskInit
+public class StageManager : MonoBehaviour, IInit
 {
     private Enemy curEnemy;
     public Enemy CurEnemy
@@ -18,17 +18,11 @@ public class StageManager : MonoBehaviour, IUniTaskInit
     }
     public EnemyType enemyType;
 
-    public async UniTask Init()
+    public void Init()
     {
         enemyType = EnemyType.YellowBird;
 
-        await CreateEnemy();
-    }
-
-    public async UniTask CreateEnemy()
-    {
-        GameObject enemyGo = await AddressableAssets.InstantiateAsync(AdressablePath.EnemyPath(enemyType.ToString()));
-        CurEnemy = enemyGo.GetComponent<Enemy>();
+        CreateEnemy();
     }
 
     public void StageUp()
@@ -36,8 +30,17 @@ public class StageManager : MonoBehaviour, IUniTaskInit
         enemyType++;
     }
 
+    public async void CreateEnemy()
+    {
+        GameObject enemyGo = await AddressableAssets.InstantiateAsync(AdressablePath.EnemyPath(enemyType.ToString()));
+        CurEnemy = enemyGo.GetComponent<Enemy>();
+    }
+
     public void DieEnemy(EnemySO info)
     {
         InGameScene.Instance.player.GetItem(info);
+        CreateEnemy();
     }
+
+    
 }

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8c2b7a34dadb949bf242407b081027, type: 3}
   m_Name: PlayerSO
   m_EditorClassIdentifier: 
-  Damage: 4
-  <Gold>k__BackingField: 100
+  Damage: 1
+  <Gold>k__BackingField: 1000
